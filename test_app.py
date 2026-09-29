@@ -13,6 +13,11 @@ def run():
     app_module.init_db()
     client = app_module.app.test_client()
 
+    r = client.get("/")
+    assert r.status_code == 200
+    assert b"Registo de Candidaturas" in r.data
+    print("OK pagina inicial (interface web)")
+
     r = client.post("/candidaturas", json={
         "empresa": "Cofidis",
         "cargo": "Generation Pro 2026",

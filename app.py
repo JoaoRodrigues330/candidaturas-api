@@ -1,6 +1,6 @@
 import sqlite3
 
-from flask import Flask, request, jsonify, g
+from flask import Flask, request, jsonify, g, render_template
 
 DATABASE = "candidaturas.db"
 
@@ -46,6 +46,13 @@ def init_db():
 
 def row_to_dict(row):
     return dict(row)
+
+
+@app.route("/")
+def pagina_inicial():
+    """Devolve a interface web (templates/index.html). A pagina depois fala
+    com a API atraves de JavaScript (static/app.js)."""
+    return render_template("index.html")
 
 
 @app.route("/candidaturas", methods=["POST"])

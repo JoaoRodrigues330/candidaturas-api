@@ -22,6 +22,19 @@ python3 app.py
 
 O servidor fica disponivel em `http://127.0.0.1:5000`.
 
+## Interface web
+
+Abrir `http://127.0.0.1:5000` no browser mostra uma interface simples (HTML + JavaScript,
+sem frameworks) que usa a propria API para:
+
+- listar as candidaturas, com filtro por estado;
+- adicionar, editar e apagar candidaturas;
+- ver as estatisticas (total e contagem por estado).
+
+Os ficheiros estao em `templates/index.html` e `static/` (`app.js`, `style.css`).
+Os erros de validacao da API (por exemplo, campos obrigatorios em falta) aparecem
+diretamente no formulario.
+
 ## Testes
 
 ```bash
@@ -34,6 +47,7 @@ Testa criar, listar, obter, atualizar, apagar e o endpoint de estatisticas.
 
 | Metodo | Endpoint                    | Descricao                                  |
 |--------|------------------------------|---------------------------------------------|
+| GET    | `/`                           | Interface web                               |
 | POST   | `/candidaturas`               | Cria uma candidatura                        |
 | GET    | `/candidaturas`               | Lista todas (filtro opcional `?estado=`)    |
 | GET    | `/candidaturas/<id>`          | Devolve uma candidatura pelo id             |

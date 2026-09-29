@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registo de Candidaturas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Registo de Candidaturas</h1>
+      <p class="sub">Interface simples para a API Flask + SQLite.</p>
+    </header>
+
+    <!-- Estatisticas: preenchidas pelo JavaScript a partir de GET /estatisticas -->
+    <section id="estatisticas" class="stats"></section>
+
+    <!-- Formulario: serve para criar (POST) e para editar (PUT) -->
+    <section class="card">
+      <h2 id="form-titulo">Nova candidatura</h2>
+      <form id="form-candidatura">
+        <div class="grid">
+          <label>Empresa *
+            <input name="empresa" type="text">
+          </label>
+          <label>Cargo *
+            <input name="cargo" type="text">
+          </label>
+          <label>Data da candidatura *
+            <input name="data_candidatura" type="date">
+          </label>
+          <label>Estado
+            <select name="estado">
+              <option value="enviada">enviada</option>
+              <option value="em análise">em análise</option>
+              <option value="entrevista">entrevista</option>
+              <option value="oferta">oferta</option>
+              <option value="rejeitada">rejeitada</option>
+            </select>
+          </label>
+          <label class="full">Link
+            <input name="link" type="url" placeholder="https://...">
+          </label>
+          <label class="full">Notas
+            <textarea name="notas" rows="2"></textarea>
+          </label>
+        </div>
+        <p id="mensagem" class="mensagem" role="status"></p>
+        <div class="acoes">
+          <button type="submit" id="btn-guardar">Adicionar</button>
+          <button type="button" id="btn-cancelar" class="secundario" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Lista: preenchida pelo JavaScript a partir de GET /candidaturas -->
+    <section class="card">
+      <div class="lista-topo">
+        <h2>Candidaturas</h2>
+        <label class="filtro">Filtrar por estado
+          <select id="filtro-estado">
+            <option value="">todos</option>
+            <option value="enviada">enviada</option>
+            <option value="em análise">em análise</option>
+            <option value="entrevista">entrevista</option>
+            <option value="oferta">oferta</option>
+            <option value="rejeitada">rejeitada</option>
+          </select>
+        </label>
+      </div>
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Cargo</th>
+              <th>Data</th>
+              <th>Estado</th>
+              <th>Link</th>
+              <th>Notas</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="lista"></tbody>
+        </table>
+      </div>
+      <p id="vazio" class="vazio" hidden>Ainda não há candidaturas.</p>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
