@@ -1,17 +1,25 @@
-# Registo de Candidaturas API
+# Job Application Tracker (candidaturas-api)
 
-API REST simples para gerir candidaturas a emprego: criar, listar, ver, editar e apagar,
-mais um endpoint de estatisticas. Projeto de portfolio focado em backend (Python + Flask
-+ base de dados), para complementar um portfolio de Data Analytics com prova de codigo
-para vagas de Junior Developer.
+A small web app to track job applications: a REST API built with Python, Flask and SQLite,
+plus a simple web interface in plain HTML, CSS and JavaScript that uses the API.
+It supports creating, listing, filtering, editing and deleting applications, and
+shows basic statistics by status.
+
+Portfolio project focused on backend development, built to complement my Data Analytics
+portfolio with hands-on code for Junior Developer roles.
+
+![Web interface of the job application tracker](docs/screenshot.png)
+
+_Screenshot with sample data. The interface and the data fields are in Portuguese._
 
 ## Stack
 
 - Python 3
 - Flask
-- SQLite (via `sqlite3`, sem ORM)
+- SQLite (through Python's built-in `sqlite3`, no ORM)
+- HTML, CSS and vanilla JavaScript (Fetch API), no frontend framework
 
-## Como correr localmente
+## Run locally
 
 ```bash
 python3 -m venv venv
@@ -20,42 +28,47 @@ pip install -r requirements.txt
 python3 app.py
 ```
 
-O servidor fica disponivel em `http://127.0.0.1:5000`.
+Then open `http://127.0.0.1:5000` in the browser.
 
-## Interface web
+## Web interface
 
-Abrir `http://127.0.0.1:5000` no browser mostra uma interface simples (HTML + JavaScript,
-sem frameworks) que usa a propria API para:
+The page at `/` is served by Flask and talks to the API with JavaScript (`fetch`). It lets you:
 
-- listar as candidaturas, com filtro por estado;
-- adicionar, editar e apagar candidaturas;
-- ver as estatisticas (total e contagem por estado).
+- list all applications, with a filter by status;
+- add, edit and delete applications;
+- see the statistics (total and count per status).
 
-Os ficheiros estao em `templates/index.html` e `static/` (`app.js`, `style.css`).
-Os erros de validacao da API (por exemplo, campos obrigatorios em falta) aparecem
-diretamente no formulario.
+Validation errors returned by the API (for example, missing required fields) are shown
+directly in the form. Text coming from the database is inserted with `textContent`, so any
+HTML typed into a field is displayed as text and never executed.
 
-## Testes
+Files: `templates/index.html`, `static/app.js`, `static/style.css`.
+
+## Tests
 
 ```bash
 python3 test_app.py
 ```
 
-Testa criar, listar, obter, atualizar, apagar e o endpoint de estatisticas.
+Uses Flask's test client (no running server needed) to test the home page, create, list,
+get, update, delete, the statistics endpoint, validation errors and not-found cases.
 
-## Endpoints
+## API endpoints
 
-| Metodo | Endpoint                    | Descricao                                  |
-|--------|------------------------------|---------------------------------------------|
-| GET    | `/`                           | Interface web                               |
-| POST   | `/candidaturas`               | Cria uma candidatura                        |
-| GET    | `/candidaturas`               | Lista todas (filtro opcional `?estado=`)    |
-| GET    | `/candidaturas/<id>`          | Devolve uma candidatura pelo id             |
-| PUT    | `/candidaturas/<id>`          | Atualiza campos de uma candidatura          |
-| DELETE | `/candidaturas/<id>`          | Apaga uma candidatura                       |
-| GET    | `/estatisticas`               | Total e contagem por estado                 |
+| Method | Endpoint                     | Description                                    |
+|--------|------------------------------|------------------------------------------------|
+| GET    | `/`                          | Web interface                                  |
+| POST   | `/candidaturas`              | Create an application                          |
+| GET    | `/candidaturas`              | List all (optional filter `?estado=`)          |
+| GET    | `/candidaturas/<id>`         | Get one application by id                      |
+| PUT    | `/candidaturas/<id>`         | Update fields of an application                |
+| DELETE | `/candidaturas/<id>`         | Delete an application                          |
+| GET    | `/estatisticas`              | Total and count per status                     |
 
-### Exemplo: criar uma candidatura
+Status codes: `201` on create, `204` on delete, `400` for invalid input, `404` when the
+application does not exist.
+
+### Example: create an application
 
 ```bash
 curl -X POST http://127.0.0.1:5000/candidaturas \
@@ -63,5 +76,6 @@ curl -X POST http://127.0.0.1:5000/candidaturas \
   -d '{"empresa": "Cofidis", "cargo": "Generation Pro 2026", "data_candidatura": "2026-09-14"}'
 ```
 
-Campos: `empresa`, `cargo`, `data_candidatura` (obrigatorios); `estado` (default
-`"enviada"`), `link`, `notas` (opcionais).
+Fields: `empresa` (company), `cargo` (role) and `data_candidatura` (application date) are
+required; `estado` (status, default `"enviada"`, i.e. "sent"), `link` and `notas` (notes)
+are optional.
